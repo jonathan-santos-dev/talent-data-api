@@ -2,12 +2,13 @@ import { Role } from "../types/Role";
 
 const HoleAndLevels = {
     'senior': [0, 1, 2],
-    'middle': [0, 1],
+    'middle': [0, 2],
     'junior': [2],
     'intern': [0, 1, 2],
 }
 
 export const HasPermission = (roles: Role[], level: number, organization?: string) => {
+
     for (const role of roles) {
         switch (role) {
             case Role.senior:
@@ -21,3 +22,4 @@ export const HasPermission = (roles: Role[], level: number, organization?: strin
     }
     return false;
 }
+

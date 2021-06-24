@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 import express from "express";
 import { body, query } from "express-validator";
 import Users from "./controllers/Users";
@@ -37,22 +39,20 @@ app.get("/products/:organizationName", query("tags").isString().optional(),
     ValidateParams,
     ValidateToken,
     (req, res) => {
-        const tags = req.query.tags as string;
+        const tags = req.query.tags as string | undefined;
         const { organizationName } = req.params;
-        const tagsParsed = tags.split(',');
+        const tagsParsed = tags?.split(',') || [];
 
         const organization = Organizations.find(organizationName);
-        if (!organization) return res.send(404).send("Organization not found");
+        if (!organization) return res.status(404).send("Organization not found");
         if (!HasPermission(req.user.roles as Role[], organization.level, organization.name))
-            return res.send(401).send("Access is not allowed");
+            return res.status(401).send("Access is not allowed");
 
-        const products = Products.find(tagsParsed);
+        const products = Products.find(tagsParsed, organization.name);
         const total = products.length;
 
         res.send({ total, products });
     });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server at: http://localhost:${PORT}`));
-
-
+export default app.listen(PORT, () => console.log(`Server at: http://localhost:${PORT}`));

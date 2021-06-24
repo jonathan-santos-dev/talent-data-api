@@ -16,13 +16,17 @@ class Products {
     private productsRaw = fs.readFileSync(path.join(process.cwd(), "fixtures", "products.txt"), "utf-8");
     private products = this.productsRaw.split("\r\n").filter(isJson).map(pr => JSON.parse(pr) as IProduct);
 
-    find(tags: string[]) {
-        return this.products.filter(p => {
-            for (const tag of tags) {
-                if (!p.tags.includes(tag)) return false;
-            }
-            return true;
-        });
+    find(tags: string[], department: string) {
+        const departmentProducts = this.products.filter(p => p.department == department);
+
+        if (tags.length > 0)
+            return departmentProducts.filter(p => {
+                for (const tag of tags) {
+                    if (p.tags.includes(tag)) return true;
+                }
+                return false;
+            });
+        return departmentProducts;
     }
 }
 

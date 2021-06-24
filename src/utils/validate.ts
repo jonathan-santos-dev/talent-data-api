@@ -13,11 +13,19 @@ export const ValidateParams: Handler = (req, res, next) => {
 
 export const ValidateToken: Handler = (req, res, next) => {
     const { authorization } = req.headers;
-    if (!authorization) return res.status(401).send("Missing authorization");
+    const token = authorization && authorization.split(' ')[1];
+
+    if (!token) return res.status(401).send("Missing authorization");
+
 
     try {
-        const payload = jwt.verify(authorization, process.env.JWT_SECRET);
-        req.user = JSON.parse(payload.toString());
+        const payload = jwt.verify(token, process.env.JWT_SECRET) as any;
+
+        req.user = {
+            email: payload.email,
+            userId: payload.userId,
+            roles: payload.roles,
+        }
     } catch (error) {
         return res.status(400).send("Invalid authorization");
     }
