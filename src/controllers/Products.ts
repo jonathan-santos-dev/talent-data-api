@@ -16,8 +16,8 @@ class Products {
     private productsRaw = fs.readFileSync(path.join(process.cwd(), "fixtures", "products.txt"), "utf-8");
     private products = this.productsRaw.split("\r\n").filter(isJson).map(pr => JSON.parse(pr) as IProduct);
 
-    find(tags: string[], department: string) {
-        const departmentProducts = this.products.filter(p => p.department == department);
+    find(tags: string[], departments: string[]) {
+        const departmentProducts = this.products.filter(p => departments.includes(p.department));
 
         if (tags.length > 0)
             return departmentProducts.filter(p => {

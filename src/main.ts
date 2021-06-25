@@ -48,7 +48,7 @@ app.get("/products/:organizationName", query("tags").isString().optional(),
         if (!HasPermission(req.user.roles as Role[], organization.level, organization.name))
             return res.status(401).send("Access is not allowed");
 
-        const products = Products.find(tagsParsed, organization.name);
+        const products = Products.find(tagsParsed, Organizations.findOneAndChilds(organization.name).map(o => o.name));
         const total = products.length;
 
         res.send({ total, products });
