@@ -20,7 +20,9 @@
 	},
 	"scripts": {
 		"dev": "ts-node-dev src/main",
-		"test": "ts-mocha src/test/**/*.spec.ts"
+		"test": "ts-mocha src/test/**/*.spec.ts",
+		"build": "tsc",
+		"start": "node dist/main.js"
 	},
 	"devDependencies": {
 		"mocha": "^9.0.1"
