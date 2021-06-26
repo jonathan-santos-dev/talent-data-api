@@ -1,0 +1,11 @@
+---
+application:
+  name: "talent-data-api"
+  project: "talent-api-test"
+  organization: "QoveryCommunity"
+routers:
+- name: "main-talent-data-api"
+  routes:
+  - application_name: "talent-data-api"
+    paths:
+    - "/*"
