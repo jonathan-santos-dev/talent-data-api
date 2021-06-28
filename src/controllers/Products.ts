@@ -1,6 +1,7 @@
 import { IProduct } from "../types/IProduct";
 import fs from "fs";
 import path from "path";
+import readline from "readline";
 
 function isJson(str: string) {
     try {
@@ -13,8 +14,18 @@ function isJson(str: string) {
 
 class Products {
 
-    private productsRaw = fs.readFileSync(path.join(process.cwd(), "fixtures", "products.txt"), "utf-8");
-    private products = this.productsRaw.split("\r\n").filter(isJson).map(pr => JSON.parse(pr) as IProduct);
+    private products: IProduct[] = [];
+
+    constructor() {
+        const lineReader = readline.createInterface({
+            input: fs.createReadStream(path.resolve("./fixtures/products.txt"))
+        });
+
+        lineReader.on("line", (line) => {
+            if (isJson(line))
+                this.products.push(JSON.parse(line));
+        })
+    }
 
     find(tags: string[], departments: string[]) {
         const departmentProducts = this.products.filter(p => departments.includes(p.department));

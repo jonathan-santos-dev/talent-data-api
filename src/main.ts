@@ -1,4 +1,3 @@
-
 require('dotenv').config()
 
 import express from "express";
@@ -9,10 +8,8 @@ import { ValidateParams, ValidateToken } from "./utils/validate";
 import Products from "./controllers/Products";
 import Organizations from "./controllers/Organizations";
 import { HasPermission } from "./utils/HasPermission";
-import { Role } from "./types/Role";
 
-import path from 'path';
-import fs from 'fs';
+import { Role } from "types/Role";
 
 const app = express();
 
@@ -58,9 +55,6 @@ app.get("/products/:organizationName", query("tags").isString().optional(),
         res.send({ total, products });
     });
 
-app.get("/", (req, res) => {
-    res.send(fs.readFileSync(path.join(process.cwd(), "fixtures", "organization.json"), "utf-8"))
-})
 
 const PORT = process.env.PORT || 3000;
 export default app.listen(PORT, () => console.log(`Server at: http://localhost:${PORT}`));
